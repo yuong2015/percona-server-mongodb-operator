@@ -21,16 +21,6 @@ spec:
         cpu: "300m"
         memory: "0.5G"
       #storageClass: aws-gp2
-    backup:
-      resources:
-        limits:
-          cpu: "100m"
-          memory: "0.5G"
-          storage: "3Gi"
-        requests:
-          cpu: "100m"
-          memory: "0.5G"
-        #storageClass: aws-gp2
   mongod:
     net:
       port: 27017
@@ -67,7 +57,9 @@ spec:
     #  format: BSON
     #  filter: '{}'
   backup:
+    version: 0.1.0
     coordinator:
+      debug: false
       resources:
         limits:
           cpu: "100m"
@@ -79,6 +71,6 @@ spec:
         #storageClass: aws-gp2
     tasks:
     - name: default
+      replset: rs0
       enabled: true
       schedule: "*/1 * * * *"
-      verbose: false

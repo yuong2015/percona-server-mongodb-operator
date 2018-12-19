@@ -226,19 +226,20 @@ type MongodSpecOperationProfiling struct {
 
 type BackupCoordinatorSpec struct {
 	*ResourcesSpec `json:"resources,omitempty"`
-	Tag            string `json:"tag,omitempty"`
+	Debug          bool `json:"debug,omitempty"`
 }
 
 type BackupSpec struct {
+	Version     string                 `json:"version,omitempty"`
 	Coordinator *BackupCoordinatorSpec `json:"coordinator,omitempty"`
 	Tasks       []*BackupTaskSpec      `json:"tasks,omitempty"`
 }
 
 type BackupTaskSpec struct {
 	Name     string `json:"name,omitempty"`
+	Replset  string `json:"replset,omitempty"`
 	Enabled  bool   `json:"enabled,omitempty"`
 	Schedule string `json:"schedule,omitempty"`
-	Verbose  bool   `json:"verbose,omitempty"`
 }
 
 type BackupStatus struct {

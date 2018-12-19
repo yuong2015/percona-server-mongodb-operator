@@ -61,6 +61,10 @@ func (c *Controller) newCoordinatorPodSpec(resources corev1.ResourceRequirements
 						Value: coordinatorDataMount,
 					},
 					{
+						Name:  "PBM_COORDINATOR_DEBUG",
+						Value: "true",
+					},
+					{
 						Name: "PBM_COORDINATOR_API_USERNAME",
 						ValueFrom: util.EnvVarSourceFromSecret(
 							c.psmdb.Spec.Secrets.Users,
