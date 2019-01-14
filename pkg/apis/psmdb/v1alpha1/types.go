@@ -48,7 +48,6 @@ type PerconaServerMongoDBSpec struct {
 	Secrets         *SecretsSpec      `json:"secrets,omitempty"`
 	Backup          *BackupSpec       `json:"backup,omitempty"`
 	ImagePullPolicy corev1.PullPolicy `json:"imagePullPolicy,omitempty"`
-	Expose          *Expose           `json:"expose,omitempty"`
 }
 
 type PerconaServerMongoDBStatus struct {
@@ -61,6 +60,8 @@ type ReplsetSpec struct {
 	Name           string      `json:"name"`
 	Size           int32       `json:"size"`
 	ClusterRole    ClusterRole `json:"clusterRole,omitempty"`
+	Arbiter        *Arbiter    `json:"arbiter,omitempty"`
+	Expose         *Expose     `json:"expose,omitempty"`
 }
 
 type ResourceSpecRequirements struct {
@@ -242,6 +243,12 @@ type BackupSpec struct {
 	Tasks            []*BackupTaskSpec      `json:"tasks,omitempty"`
 }
 
+type BackupCompressionType string
+
+var (
+	BackupCompressionGzip BackupCompressionType = "gzip"
+)
+
 type BackupDestinationType string
 
 var (
@@ -253,6 +260,7 @@ type BackupTaskSpec struct {
 	Name            string                `json:"name,omitempty"`
 	Enabled         bool                  `json:"enabled"`
 	Schedule        string                `json:"schedule,omitempty"`
+	CompressionType BackupCompressionType `json:"compressionType,omitempty"`
 	DestinationType BackupDestinationType `json:"destinationType,omitempty"`
 }
 
@@ -260,6 +268,11 @@ type BackupTaskStatus struct {
 	Name    string `json:"name,omitempty"`
 	Enabled bool   `json:"enabled"`
 	CronJob string `json:"cronJob,omitempty"`
+}
+
+type Arbiter struct {
+	Enabled bool  `json:"enabled"`
+	Size    int32 `json:"size"`
 }
 
 type Expose struct {
