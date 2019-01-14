@@ -3,7 +3,6 @@ package stub
 import (
 	"bufio"
 	"bytes"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -19,6 +18,8 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/tools/remotecommand"
 )
+
+var execCommandTimeout = 30 * time.Second
 
 // printOutput outputs stdout/stderr log buffers from commands
 func printOutputBuffer(cmd, pod string, r io.Reader, out io.Writer) error {
@@ -120,8 +121,9 @@ func execCommandInContainer(pod corev1.Pod, containerName string, cmd []string) 
 	}()
 
 	select {
-	case <-time.After(time.Minute):
-		return errors.New("timeout executing command")
+	case <-time.After(execCommandTimeout):
+		logrus.Errorf("timeout reach executing command on pod %s: %s", pod.Name, cmd[0])
+		return fmt.Errorf("timeout executing command")
 	case out := <-outChan:
 		return printCommandOutput(cmd[0], pod.Name, &out.stdout, &out.stderr, os.Stdout)
 	}
